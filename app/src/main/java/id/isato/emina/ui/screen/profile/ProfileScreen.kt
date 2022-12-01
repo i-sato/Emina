@@ -17,6 +17,7 @@ import id.isato.emina.ui.common.ErrorBox
 import id.isato.emina.ui.common.NetworkImage
 import id.isato.emina.ui.common.UiState
 import id.isato.emina.ui.model.Profile
+import id.isato.emina.ui.theme.EminaTheme
 
 @Composable
 fun ProfileScreen(
@@ -85,5 +86,7 @@ private fun ProfileContent(
 @Preview(showBackground = true)
 @Composable
 fun ProfileContentPreview() {
-    ProfileContent(profile = Profile.mock())
+    EminaTheme {
+        ProfileContent(profile = Profile.mock())
+    }
 }
