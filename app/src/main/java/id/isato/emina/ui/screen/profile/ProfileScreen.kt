@@ -80,6 +80,7 @@ private fun ProfileContent(
             Column {
                 Text(text = profile.userName, fontWeight = FontWeight.Bold, fontSize = 18.sp)
                 Text(text = profile.occupation, fontWeight = FontWeight.Medium, fontSize = 16.sp)
+                Text(text = profile.email, fontWeight = FontWeight.Light, fontSize = 16.sp)
                 Text(
                     text = profile.bio,
                     fontStyle = FontStyle.Italic,

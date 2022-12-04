@@ -17,6 +17,7 @@ class ProfileRepositoryImpl @Inject constructor(
         emit(
             ProfileDomain(
                 userName = "Iman",
+                email = "isato.iman@gmail.com",
                 occupation = "Android Engineer",
                 avatar = "https://github.com/i-sato/repo/blob/main/photo.jpg?raw=true",
                 bio = "Hi! I'm Iman, working as Android Developer. Enthusiast in creating app from scratch using the latest technology.",

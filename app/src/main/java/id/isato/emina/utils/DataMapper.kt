@@ -12,6 +12,7 @@ import id.isato.emina.ui.model.Profile
 fun ProfileDomain.asPresentation(): Profile {
     return Profile(
         userName = userName,
+        email = email,
         occupation = occupation,
         avatar = avatar,
         bio = bio,
