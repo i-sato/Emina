@@ -1,6 +1,7 @@
 package id.isato.emina.domain.usecase
 
 import id.isato.emina.data.Resource
+import id.isato.emina.domain.model.AnimeDetailDomain
 import id.isato.emina.domain.model.AnimeDomain
 import id.isato.emina.domain.repository.AnimeRepository
 import kotlinx.coroutines.flow.Flow
@@ -13,5 +14,8 @@ class AnimeInteractor @Inject constructor(
 
     override suspend fun getTopAnime(): Flow<Resource<List<AnimeDomain>>> =
         repository.getTopAnime().distinctUntilChanged()
+
+    override suspend fun getAnimeById(malId: Int): AnimeDetailDomain =
+        repository.getAnimeById(malId)
 
 }

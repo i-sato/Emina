@@ -1,10 +1,11 @@
 package id.isato.emina.ui.screen.profile
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontStyle
@@ -13,18 +14,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import id.isato.emina.ui.common.ErrorBox
 import id.isato.emina.ui.common.NetworkImage
 import id.isato.emina.ui.common.UiState
 import id.isato.emina.ui.model.Profile
 import id.isato.emina.ui.theme.EminaTheme
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
-    viewModel.profileState.collectAsState(initial = UiState.Loading).value.let { profileState ->
+    viewModel.profileState.collectAsStateWithLifecycle(initialValue = UiState.Loading).value.let { profileState ->
         when (profileState) {
             is UiState.Loading -> {
                 viewModel.getProfile()
@@ -52,7 +56,11 @@ private fun ProfileContent(
     modifier: Modifier = Modifier,
     profile: Profile
 ) {
-    Column(modifier = modifier.fillMaxSize()) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
         NetworkImage(
             url = profile.backdrop, modifier = modifier
                 .fillMaxWidth()

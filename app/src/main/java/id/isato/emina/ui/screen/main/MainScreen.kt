@@ -11,13 +11,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import id.isato.emina.R
 import id.isato.emina.ui.navigation.NavigationItem
 import id.isato.emina.ui.navigation.Screen
+import id.isato.emina.ui.screen.detail.DetailScreen
 import id.isato.emina.ui.screen.home.HomeScreen
 import id.isato.emina.ui.screen.profile.ProfileScreen
 
@@ -43,10 +46,26 @@ fun MainScreen(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Home.route) {
-                HomeScreen()
+                HomeScreen(
+                    navigateToDetail = { animeId ->
+                        navController.navigate(Screen.DetailAnime.createRoute(animeId))
+                    }
+                )
             }
             composable(Screen.Profile.route) {
                 ProfileScreen()
+            }
+            composable(
+                route = Screen.DetailAnime.route,
+                arguments = listOf(navArgument("animeId" ) { type = NavType.IntType })
+            ) {
+                val id = it.arguments?.getInt("animeId") ?: -1
+                DetailScreen(
+                    animeId = id,
+                    navigateBack = {
+                        navController.navigateUp()
+                    }
+                )
             }
         }
     }

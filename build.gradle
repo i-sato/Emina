@@ -9,10 +9,13 @@ buildscript {
         hilt_version = '2.44'
         kotlin_android_version = '1.7.20'
         landscapist_version = '2.1.0'
-        lifecycle_ktx_version = '2.5.1'
+        lifecycle_ktx_version = '2.6.0-alpha03'
         okhttp_version = '4.10.0'
         retrofit_version = '2.9.0'
+        room_version = '2.4.3'
         secret_gradle_version = '2.0.1'
+        sqlcipher_version = '4.4.0'
+        sqlite_ktx_version = '2.2.0'
 
         // Unit Test
         junit_version = '4.13.2'

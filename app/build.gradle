@@ -75,6 +75,7 @@ dependencies {
     implementation "com.github.skydoves:landscapist-glide:$landscapist_version"
 
     // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_ktx_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_ktx_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_ktx_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_ktx_version"
@@ -85,6 +86,16 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
     //noinspection GradleDependency
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
+
+    // Room
+    implementation "androidx.room:room-ktx:$room_version"
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-paging:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
+    // SQLCipher
+    implementation "net.zetetic:android-database-sqlcipher:$sqlcipher_version"
+    implementation "androidx.sqlite:sqlite-ktx:$sqlite_ktx_version"
 
     // Unit Test
     testImplementation "junit:junit:$junit_version"

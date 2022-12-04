@@ -1,5 +1,6 @@
 package id.isato.emina.ui.screen.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -16,26 +17,33 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import id.isato.emina.ui.common.CircularProgressLoading
 import id.isato.emina.ui.common.ErrorBox
 import id.isato.emina.ui.common.NetworkImage
 import id.isato.emina.ui.common.UiState
 import id.isato.emina.ui.model.Anime
 import id.isato.emina.ui.theme.EminaTheme
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
+    navigateToDetail: (Int) -> Unit
 ) {
-    viewModel.animeState.collectAsState(initial = UiState.Loading).value.let { animeState ->
+    viewModel.animeState.collectAsStateWithLifecycle(initialValue = UiState.Loading).value.let { animeState ->
         when (animeState) {
             is UiState.Loading -> {
                 viewModel.getTopAnime()
+                CircularProgressLoading(modifier = modifier)
             }
             is UiState.Success -> {
                 HomeContent(
                     animeList = animeState.data,
-                    modifier = modifier
+                    modifier = modifier,
+                    navigateToDetail = navigateToDetail
                 )
             }
             is UiState.Error -> {
@@ -53,7 +61,8 @@ fun HomeScreen(
 @Composable
 private fun HomeContent(
     animeList: List<Anime>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToDetail: (Int) -> Unit
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(160.dp),
@@ -67,7 +76,9 @@ private fun HomeContent(
         ) { anime ->
             AnimeItem(
                 anime = anime,
-                modifier = modifier
+                modifier = modifier.clickable {
+                    navigateToDetail(anime.malId)
+                }
             )
         }
     }

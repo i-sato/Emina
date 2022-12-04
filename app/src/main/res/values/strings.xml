@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Emina</string>
 
+    <string name="back">Kembali</string>
+
     <string name="menu_home">Home</string>
     <string name="menu_profile">Profile</string>
 </resources>

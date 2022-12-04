@@ -33,6 +33,7 @@ class HomeViewModel @Inject constructor(
                             _animeState.value = UiState.Success(it)
                         }
                     }
+                    is Resource.Loading -> _animeState.value = UiState.Loading
                     is Resource.Error -> {
                         resource.message?.let {
                             _animeState.value = UiState.Error(it)

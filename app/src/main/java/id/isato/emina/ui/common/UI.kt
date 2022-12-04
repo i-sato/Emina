@@ -66,3 +66,15 @@ fun NetworkImage(
         previewPlaceholder = R.drawable.ic_image_black_24
     )
 }
+
+@Composable
+fun CircularProgressLoading(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator()
+    }
+}
