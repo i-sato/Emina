@@ -40,7 +40,7 @@ fun HomeScreen(
                 CircularProgressLoading(modifier = modifier)
             }
             is UiState.Success -> {
-                HomeContent(
+                AnimeList(
                     animeList = animeState.data,
                     modifier = modifier,
                     navigateToDetail = navigateToDetail
@@ -59,7 +59,7 @@ fun HomeScreen(
 }
 
 @Composable
-private fun HomeContent(
+fun AnimeList(
     animeList: List<Anime>,
     modifier: Modifier = Modifier,
     navigateToDetail: (Int) -> Unit

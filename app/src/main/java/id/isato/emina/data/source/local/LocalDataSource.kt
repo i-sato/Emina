@@ -7,8 +7,12 @@ interface LocalDataSource {
 
     fun getTopAnime(): Flow<List<AnimeEntity>>
 
+    fun getFavoriteAnime(): Flow<List<AnimeEntity>>
+
     suspend fun insertAnime(anime: List<AnimeEntity>)
 
     suspend fun getAnimeById(malId: Int): AnimeEntity
+
+    suspend fun updateFavorite(malId: Int, isFavorite: Boolean)
 
 }

@@ -17,6 +17,8 @@ data class AnimeEntity(
     @ColumnInfo(name = "image_url")
     val imageUrl: String,
 
-    val synopsis: String?
+    val synopsis: String?,
+
+    val favorite: Boolean = false
 
 )

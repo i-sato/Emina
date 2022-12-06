@@ -12,9 +12,15 @@ class LocalDataSourceImpl @Inject constructor(
     override fun getTopAnime(): Flow<List<AnimeEntity>> =
         animeDao.getDistinctTopAnime()
 
+    override fun getFavoriteAnime(): Flow<List<AnimeEntity>> =
+        animeDao.getDistinctFavoriteAnime()
+
     override suspend fun insertAnime(anime: List<AnimeEntity>) =
         animeDao.insertAnime(anime)
 
     override suspend fun getAnimeById(malId: Int): AnimeEntity =
         animeDao.getAnimeById(malId)
+
+    override suspend fun updateFavorite(malId: Int, isFavorite: Boolean) =
+        animeDao.updateFavorite(malId, isFavorite)
 }

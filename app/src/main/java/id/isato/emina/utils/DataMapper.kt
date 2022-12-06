@@ -42,7 +42,8 @@ fun AnimeEntity.asDetailDomain(): AnimeDetailDomain {
         malId = malId,
         title = title,
         imageUrl = imageUrl,
-        synopsis = synopsis
+        synopsis = synopsis,
+        isFavorite = favorite
     )
 }
 
@@ -59,6 +60,7 @@ fun AnimeDetailDomain.asPresentation(): AnimeDetail {
         malId = malId,
         title = title,
         imageUrl = imageUrl,
-        synopsis = synopsis ?: "-"
+        synopsis = synopsis ?: "-",
+        isFavorite = isFavorite
     )
 }

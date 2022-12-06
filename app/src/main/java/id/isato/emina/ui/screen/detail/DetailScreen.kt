@@ -3,16 +3,23 @@ package id.isato.emina.ui.screen.detail
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -46,7 +53,10 @@ fun DetailScreen(
                 DetailContent(
                     modifier = modifier,
                     detail = detail,
-                    onBackClick = navigateBack
+                    onBackClick = navigateBack,
+                    onFavoriteClick = { animeId, isFavorite ->
+                        viewModel.setFavorite(animeId, isFavorite)
+                    }
                 )
             }
             is UiState.Error -> {
@@ -66,41 +76,73 @@ fun DetailContent(
     modifier: Modifier = Modifier,
     detail: AnimeDetail,
     onBackClick: () -> Unit,
+    onFavoriteClick: (Int, Boolean) -> Unit
 ) {
 
-    Column(
-        modifier = modifier
-            .padding(8.dp)
-            .verticalScroll(rememberScrollState())
-    ) {
-        Box {
-            NetworkImage(
-                url = detail.imageUrl,
-                modifier = modifier
-                    .fillMaxWidth()
-                    .size(250.dp)
-                    .alpha(0.7F)
-            )
-            Icon(imageVector = Icons.Default.ArrowBack,
-                contentDescription = stringResource(R.string.back),
-                modifier = modifier
-                    .size(32.dp)
-                    .clickable { onBackClick.invoke() },
-            )
+    var isFavorite by rememberSaveable { mutableStateOf(detail.isFavorite) }
+
+    Box(modifier = modifier
+        .fillMaxSize()
+        .padding(8.dp)) {
+        Column(
+            modifier = modifier.verticalScroll(rememberScrollState())
+        ) {
+            Box {
+                NetworkImage(
+                    url = detail.imageUrl,
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .size(250.dp)
+                )
+                Icon(imageVector = Icons.Default.ArrowBack,
+                    contentDescription = stringResource(R.string.back),
+                    modifier = modifier
+                        .size(32.dp)
+                        .clickable { onBackClick.invoke() },
+                )
+                Surface(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+                        .align(Alignment.BottomCenter),
+                    color = Color.Black.copy(0.6F)
+                ) {
+                    Text(
+                        text = detail.title,
+                        modifier = modifier
+                            .align(Alignment.BottomStart)
+                            .padding(8.dp),
+                        style = MaterialTheme.typography.h6,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Color.LightGray
+                    )
+                }
+            }
             Text(
-                text = detail.title,
-                modifier = modifier
-                    .align(Alignment.BottomStart)
-                    .padding(8.dp),
-                style = MaterialTheme.typography.h6,
-                fontWeight = FontWeight.SemiBold
+                modifier = modifier.padding(top = 8.dp),
+                text = detail.synopsis,
+                style = MaterialTheme.typography.body2,
+                textAlign = TextAlign.Justify
             )
         }
-        Text(
-            modifier = modifier.padding(top = 8.dp),
-            text = detail.synopsis,
-            style = MaterialTheme.typography.body2,
-            textAlign = TextAlign.Justify
-        )
+        FavoriteButton(modifier = modifier.align(Alignment.BottomEnd), isFavorite = isFavorite, onClick = {
+            isFavorite = !isFavorite
+            onFavoriteClick.invoke(detail.malId, isFavorite)
+        })
+    }
+}
+
+@Composable
+fun FavoriteButton(
+    isFavorite: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    FloatingActionButton(shape = CircleShape, onClick = onClick, modifier = modifier) {
+        val icon = when (isFavorite) {
+            true -> Icons.Filled.Favorite
+            false -> Icons.Filled.FavoriteBorder
+        }
+        Icon(imageVector = icon, contentDescription = stringResource(R.string.favorite))
     }
 }

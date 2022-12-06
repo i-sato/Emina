@@ -12,10 +12,15 @@ class AnimeInteractor @Inject constructor(
     private val repository: AnimeRepository
 ): AnimeUseCase {
 
-    override suspend fun getTopAnime(): Flow<Resource<List<AnimeDomain>>> =
+    override fun getTopAnime(): Flow<Resource<List<AnimeDomain>>> =
         repository.getTopAnime().distinctUntilChanged()
+
+    override fun getFavoriteAnime(): Flow<List<AnimeDomain>> =
+        repository.getFavoriteAnime()
 
     override suspend fun getAnimeById(malId: Int): AnimeDetailDomain =
         repository.getAnimeById(malId)
 
+    override suspend fun updateFavorite(malId: Int, isFavorite: Boolean) =
+        repository.updateFavorite(malId, isFavorite)
 }

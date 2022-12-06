@@ -7,8 +7,12 @@ import kotlinx.coroutines.flow.Flow
 
 interface AnimeUseCase {
 
-    suspend fun getTopAnime(): Flow<Resource<List<AnimeDomain>>>
+    fun getTopAnime(): Flow<Resource<List<AnimeDomain>>>
+
+    fun getFavoriteAnime(): Flow<List<AnimeDomain>>
 
     suspend fun getAnimeById(malId: Int): AnimeDetailDomain
+
+    suspend fun updateFavorite(malId: Int, isFavorite: Boolean)
 
 }

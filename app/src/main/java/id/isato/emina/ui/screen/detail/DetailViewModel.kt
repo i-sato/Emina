@@ -31,4 +31,10 @@ class DetailViewModel @Inject constructor(
         }
     }
 
+    fun setFavorite(malId: Int, isFavorite: Boolean) {
+        viewModelScope.launch {
+            useCase.updateFavorite(malId, isFavorite)
+        }
+    }
+
 }

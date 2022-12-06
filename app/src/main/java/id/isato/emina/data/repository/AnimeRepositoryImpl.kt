@@ -17,6 +17,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class AnimeRepositoryImpl @Inject constructor(
@@ -43,7 +44,17 @@ class AnimeRepositoryImpl @Inject constructor(
             }
         }.asFlow().flowOn(ioDispatcher)
 
-    override suspend fun getAnimeById(malId: Int): AnimeDetailDomain =
-        local.getAnimeById(malId).asDetailDomain()
+    override fun getFavoriteAnime(): Flow<List<AnimeDomain>> =
+        local.getFavoriteAnime().map { it.map { anime -> anime.asDomain() } }.flowOn(ioDispatcher)
 
+    override suspend fun getAnimeById(malId: Int): AnimeDetailDomain {
+        return withContext(ioDispatcher) {
+            local.getAnimeById(malId).asDetailDomain()
+        }
+    }
+
+    override suspend fun updateFavorite(malId: Int, isFavorite: Boolean) =
+        withContext(ioDispatcher) {
+            local.updateFavorite(malId, isFavorite)
+        }
 }

@@ -17,10 +17,18 @@ abstract class AnimeDao {
     fun getDistinctTopAnime(): Flow<List<AnimeEntity>> =
         getTopAnime().distinctUntilChanged()
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Query("SELECT * FROM anime WHERE favorite = '1'")
+    protected abstract fun getFavoriteAnime(): Flow<List<AnimeEntity>>
+
+    fun getDistinctFavoriteAnime(): Flow<List<AnimeEntity>> = getFavoriteAnime().distinctUntilChanged()
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     abstract suspend fun insertAnime(anime: List<AnimeEntity>)
 
     @Query("SELECT * FROM anime WHERE mal_id = :malId")
     abstract suspend fun getAnimeById(malId: Int): AnimeEntity
+
+    @Query("UPDATE anime SET favorite = :isFavorite WHERE mal_id = :malId")
+    abstract suspend fun updateFavorite(malId: Int, isFavorite: Boolean)
 
 }

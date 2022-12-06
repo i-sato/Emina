@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,6 +22,7 @@ import id.isato.emina.R
 import id.isato.emina.ui.navigation.NavigationItem
 import id.isato.emina.ui.navigation.Screen
 import id.isato.emina.ui.screen.detail.DetailScreen
+import id.isato.emina.ui.screen.favorite.FavoriteScreen
 import id.isato.emina.ui.screen.home.HomeScreen
 import id.isato.emina.ui.screen.profile.ProfileScreen
 
@@ -51,6 +53,11 @@ fun MainScreen(
                         navController.navigate(Screen.DetailAnime.createRoute(animeId))
                     }
                 )
+            }
+            composable(Screen.Favorite.route) {
+                FavoriteScreen(navigateToDetail = { animeId ->
+                    navController.navigate(Screen.DetailAnime.createRoute(animeId))
+                })
             }
             composable(Screen.Profile.route) {
                 ProfileScreen()
@@ -85,6 +92,11 @@ private fun BottomBar(
                 title = stringResource(R.string.menu_home),
                 icon = Icons.Default.Home,
                 screen = Screen.Home
+            ),
+            NavigationItem(
+                title = stringResource(R.string.favorite),
+                icon = Icons.Default.Favorite,
+                screen = Screen.Favorite
             ),
             NavigationItem(
                 title = stringResource(R.string.menu_profile),
