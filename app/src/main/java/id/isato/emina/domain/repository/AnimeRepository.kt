@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface AnimeRepository {
 
-    fun getTopAnime(): Flow<Resource<List<AnimeDomain>>>
+    fun getTopAnime(animeTitle: String?): Flow<Resource<List<AnimeDomain>>>
 
     fun getFavoriteAnime(): Flow<List<AnimeDomain>>
 

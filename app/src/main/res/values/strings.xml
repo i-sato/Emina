@@ -9,4 +9,6 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_profile">Profile</string>
+
+    <string name="search_anime">Anime</string>
 </resources>

@@ -3,6 +3,7 @@ package id.isato.emina.ui.common
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -77,4 +78,19 @@ fun CircularProgressLoading(
     ) {
         CircularProgressIndicator()
     }
+}
+
+@Composable
+fun OutlinedTextInput(
+    input: String,
+    label: String,
+    modifier: Modifier = Modifier,
+    onValueChange: (String) -> Unit
+) {
+    OutlinedTextField(
+        modifier = modifier,
+        value = input,
+        onValueChange = onValueChange,
+        label = { Text(text = label) }
+    )
 }

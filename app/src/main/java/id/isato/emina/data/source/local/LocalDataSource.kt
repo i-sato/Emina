@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface LocalDataSource {
 
-    fun getTopAnime(): Flow<List<AnimeEntity>>
+    fun getTopAnime(animeTitle: String?): Flow<List<AnimeEntity>>
 
     fun getFavoriteAnime(): Flow<List<AnimeEntity>>
 

@@ -8,9 +8,10 @@ import id.isato.emina.domain.usecase.AnimeUseCase
 import id.isato.emina.ui.common.UiState
 import id.isato.emina.ui.model.Anime
 import id.isato.emina.utils.asPresentation
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
+import id.isato.emina.utils.ext.asStateFlow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,30 +19,30 @@ class HomeViewModel @Inject constructor(
     private val useCase: AnimeUseCase
 ) : ViewModel() {
 
-    private val _animeState: MutableStateFlow<UiState<List<Anime>>> =
-        MutableStateFlow(UiState.Loading)
-    val animeState: StateFlow<UiState<List<Anime>>>
-        get() = _animeState
+    private val _filter: MutableStateFlow<String> = MutableStateFlow("")
 
-    fun getTopAnime() {
-        viewModelScope.launch {
-            useCase.getTopAnime().collect { resource ->
-                when (resource) {
-                    is Resource.Success -> {
-                        val anime = resource.data?.map { it.asPresentation() }
-                        anime?.let {
-                            _animeState.value = UiState.Success(it)
-                        }
-                    }
-                    is Resource.Loading -> _animeState.value = UiState.Loading
-                    is Resource.Error -> {
-                        resource.message?.let {
-                            _animeState.value = UiState.Error(it)
-                        }
-                    }
-                }
+    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
+    val animeState: StateFlow<UiState<List<Anime>>> = _filter.debounce(500).flatMapLatest {
+        useCase.getTopAnime(it)
+    }.map { resource ->
+        when (resource) {
+            is Resource.Success -> {
+                val anime = resource.data?.map { it.asPresentation() }
+                anime?.let {
+                    UiState.Success(it)
+                } ?: UiState.Error("Failed to fetch anime. Data is empty.")
+            }
+            is Resource.Loading -> UiState.Loading
+            is Resource.Error -> {
+                resource.message?.let {
+                    UiState.Error(it)
+                } ?: UiState.Error("Failed to fetch anime. Unknown Error.")
             }
         }
+    }.asStateFlow(viewModelScope, UiState.Loading)
+
+    fun filterAnime(animeTitle: String) {
+        _filter.value = animeTitle
     }
 
 }

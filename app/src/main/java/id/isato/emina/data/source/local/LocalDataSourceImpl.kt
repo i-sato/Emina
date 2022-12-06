@@ -9,8 +9,12 @@ class LocalDataSourceImpl @Inject constructor(
     private val animeDao: AnimeDao
 ): LocalDataSource {
 
-    override fun getTopAnime(): Flow<List<AnimeEntity>> =
-        animeDao.getDistinctTopAnime()
+    override fun getTopAnime(animeTitle: String?): Flow<List<AnimeEntity>> {
+        return when {
+            animeTitle.isNullOrBlank() -> animeDao.getDistinctTopAnime()
+            else -> animeDao.getDistinctFilteredTopAnime(animeTitle)
+        }
+    }
 
     override fun getFavoriteAnime(): Flow<List<AnimeEntity>> =
         animeDao.getDistinctFavoriteAnime()

@@ -17,6 +17,12 @@ abstract class AnimeDao {
     fun getDistinctTopAnime(): Flow<List<AnimeEntity>> =
         getTopAnime().distinctUntilChanged()
 
+    @Query("SELECT * FROM anime WHERE title LIKE '%' || :animeTitle || '%'")
+    protected abstract fun getFilteredTopAnime(animeTitle: String): Flow<List<AnimeEntity>>
+
+    fun getDistinctFilteredTopAnime(animeTitle: String): Flow<List<AnimeEntity>> =
+        getFilteredTopAnime(animeTitle).distinctUntilChanged()
+
     @Query("SELECT * FROM anime WHERE favorite = '1'")
     protected abstract fun getFavoriteAnime(): Flow<List<AnimeEntity>>
 

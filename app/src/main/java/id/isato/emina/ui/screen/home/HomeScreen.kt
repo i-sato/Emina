@@ -10,8 +10,10 @@ import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,10 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import id.isato.emina.ui.common.CircularProgressLoading
-import id.isato.emina.ui.common.ErrorBox
-import id.isato.emina.ui.common.NetworkImage
-import id.isato.emina.ui.common.UiState
+import id.isato.emina.R
+import id.isato.emina.ui.common.*
 import id.isato.emina.ui.model.Anime
 import id.isato.emina.ui.theme.EminaTheme
 
@@ -33,26 +33,39 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToDetail: (Int) -> Unit
 ) {
-    viewModel.animeState.collectAsStateWithLifecycle(initialValue = UiState.Loading).value.let { animeState ->
-        when (animeState) {
-            is UiState.Loading -> {
-                viewModel.getTopAnime()
-                CircularProgressLoading(modifier = modifier)
+    var input by rememberSaveable { mutableStateOf("") }
+    Column {
+        OutlinedTextInput(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            input = input,
+            label = stringResource(R.string.search_anime),
+            onValueChange = {
+                input = it
+                viewModel.filterAnime(it)
             }
-            is UiState.Success -> {
-                AnimeList(
-                    animeList = animeState.data,
-                    modifier = modifier,
-                    navigateToDetail = navigateToDetail
-                )
-            }
-            is UiState.Error -> {
-                ErrorBox(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxSize(),
-                    message = animeState.errorMessage
-                )
+        )
+        viewModel.animeState.collectAsStateWithLifecycle().value.let { animeState ->
+            when (animeState) {
+                is UiState.Loading -> {
+                    CircularProgressLoading(modifier = modifier)
+                }
+                is UiState.Success -> {
+                    AnimeList(
+                        animeList = animeState.data,
+                        modifier = modifier,
+                        navigateToDetail = navigateToDetail
+                    )
+                }
+                is UiState.Error -> {
+                    ErrorBox(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxSize(),
+                        message = animeState.errorMessage
+                    )
+                }
             }
         }
     }

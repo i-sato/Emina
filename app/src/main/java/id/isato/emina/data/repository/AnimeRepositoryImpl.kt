@@ -26,10 +26,10 @@ class AnimeRepositoryImpl @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ): AnimeRepository {
 
-    override fun getTopAnime(): Flow<Resource<List<AnimeDomain>>> =
+    override fun getTopAnime(animeTitle: String?): Flow<Resource<List<AnimeDomain>>> =
         object: NetworkBoundResource<List<AnimeDomain>, List<AnimeResponse>>() {
             override fun loadFromDB(): Flow<List<AnimeDomain>> =
-                local.getTopAnime().map { anime ->
+                local.getTopAnime(animeTitle).map { anime ->
                     anime.map { it.asDomain() }
                 }.flowOn(ioDispatcher)
 

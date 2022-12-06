@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface AnimeUseCase {
 
-    fun getTopAnime(): Flow<Resource<List<AnimeDomain>>>
+    suspend fun getTopAnime(animeTitle: String?): Flow<Resource<List<AnimeDomain>>>
 
     fun getFavoriteAnime(): Flow<List<AnimeDomain>>
 

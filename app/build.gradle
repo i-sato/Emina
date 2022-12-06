@@ -106,6 +106,9 @@ dependencies {
     implementation "net.zetetic:android-database-sqlcipher:$sqlcipher_version"
     implementation "androidx.sqlite:sqlite-ktx:$sqlite_ktx_version"
 
+    // Timber
+    implementation "com.jakewharton.timber:timber:$timber_version"
+
     // Unit Test
     testImplementation "junit:junit:$junit_version"
 
