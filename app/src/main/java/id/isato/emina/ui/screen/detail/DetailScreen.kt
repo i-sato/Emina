@@ -31,7 +31,6 @@ import id.isato.emina.ui.common.CircularProgressLoading
 import id.isato.emina.ui.common.ErrorBox
 import id.isato.emina.ui.common.NetworkImage
 import id.isato.emina.ui.common.UiState
-import id.isato.emina.ui.model.AnimeDetail
 import id.isato.emina.R
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
@@ -52,10 +51,13 @@ fun DetailScreen(
                 val detail = detailState.data
                 DetailContent(
                     modifier = modifier,
-                    detail = detail,
+                    title = detail.title,
+                    imageUrl = detail.imageUrl,
+                    synopsis = detail.synopsis,
+                    favorite = detail.isFavorite,
                     onBackClick = navigateBack,
-                    onFavoriteClick = { animeId, isFavorite ->
-                        viewModel.setFavorite(animeId, isFavorite)
+                    onFavoriteClick = { isFavorite ->
+                        viewModel.setFavorite(detail.malId, isFavorite)
                     }
                 )
             }
@@ -74,12 +76,15 @@ fun DetailScreen(
 @Composable
 fun DetailContent(
     modifier: Modifier = Modifier,
-    detail: AnimeDetail,
+    title: String,
+    imageUrl: String,
+    synopsis: String,
+    favorite: Boolean,
     onBackClick: () -> Unit,
-    onFavoriteClick: (Int, Boolean) -> Unit
+    onFavoriteClick: (Boolean) -> Unit
 ) {
 
-    var isFavorite by rememberSaveable { mutableStateOf(detail.isFavorite) }
+    var isFavorite by rememberSaveable { mutableStateOf(favorite) }
 
     Box(modifier = modifier
         .fillMaxSize()
@@ -89,7 +94,7 @@ fun DetailContent(
         ) {
             Box {
                 NetworkImage(
-                    url = detail.imageUrl,
+                    url = imageUrl,
                     modifier = modifier
                         .fillMaxWidth()
                         .size(250.dp)
@@ -108,7 +113,7 @@ fun DetailContent(
                     color = Color.Black.copy(0.6F)
                 ) {
                     Text(
-                        text = detail.title,
+                        text = title,
                         modifier = modifier
                             .align(Alignment.BottomStart)
                             .padding(8.dp),
@@ -120,14 +125,14 @@ fun DetailContent(
             }
             Text(
                 modifier = modifier.padding(top = 8.dp),
-                text = detail.synopsis,
+                text = synopsis,
                 style = MaterialTheme.typography.body2,
                 textAlign = TextAlign.Justify
             )
         }
         FavoriteButton(modifier = modifier.align(Alignment.BottomEnd), isFavorite = isFavorite, onClick = {
             isFavorite = !isFavorite
-            onFavoriteClick.invoke(detail.malId, isFavorite)
+            onFavoriteClick.invoke(isFavorite)
         })
     }
 }
