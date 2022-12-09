@@ -9,4 +9,6 @@ object TestTags {
 
     const val LOADING = "Loading"
 
+    const val PROFILE = "Profile"
+
 }

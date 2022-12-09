@@ -8,6 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,6 +22,7 @@ import id.isato.emina.ui.common.NetworkImage
 import id.isato.emina.ui.common.UiState
 import id.isato.emina.ui.model.Profile
 import id.isato.emina.ui.theme.EminaTheme
+import id.isato.emina.utils.TestTags
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -58,6 +60,7 @@ private fun ProfileContent(
 ) {
     Column(
         modifier = modifier
+            .testTag(TestTags.PROFILE)
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
     ) {

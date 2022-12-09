@@ -151,6 +151,6 @@ fun FavoriteButton(
             true -> Icons.Filled.Favorite
             false -> Icons.Filled.FavoriteBorder
         }
-        Icon(imageVector = icon, contentDescription = stringResource(R.string.favorite))
+        Icon(imageVector = icon, contentDescription = stringResource(R.string.add_favorite))
     }
 }
