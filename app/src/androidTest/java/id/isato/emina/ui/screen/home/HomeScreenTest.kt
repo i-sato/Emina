@@ -67,6 +67,21 @@ class HomeScreenTest {
     }
 
     @Test
+    fun filterAnime_displayUIProperly() {
+        mockWebServer.dispatcher = webServerDispatcher
+        val animeTitle = DummyData.generateAnimeResponses()[0].title
+        composeTestRule.run {
+            onNodeWithText(composeTestRule.activity.getString(R.string.menu_home)).performClick()
+            onNodeWithText(activity.getString(R.string.search_anime)).assertIsDisplayed()
+            waitUntilDoesNotExist(hasTestTag(TestTags.LOADING))
+            waitUntilExists(hasTestTag(TestTags.ANIME_LIST))
+            onNodeWithText(activity.getString(R.string.search_anime)).performTextInput(animeTitle.take(5))
+            waitUntilExists(hasTestTag(TestTags.ANIME_LIST))
+            waitUntilExists(hasText(animeTitle))
+        }
+    }
+
+    @Test
     fun loadAnime_navigatesToDetail() {
         mockWebServer.dispatcher = webServerDispatcher
         val animeTitle = DummyData.generateAnimeResponses()[0].title
