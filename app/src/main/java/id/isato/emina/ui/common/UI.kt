@@ -8,12 +8,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.glide.GlideImage
 import id.isato.emina.R
 import id.isato.emina.ui.theme.EminaTheme
+import id.isato.emina.utils.TestTags
 
 @Composable
 fun ErrorBox(
@@ -21,7 +23,7 @@ fun ErrorBox(
     message: String
 ) {
     Box(
-        modifier = modifier,
+        modifier = modifier.testTag(TestTags.ERROR),
         contentAlignment = Alignment.Center
     ) {
         Text(message)
@@ -73,7 +75,7 @@ fun CircularProgressLoading(
     modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.testTag(TestTags.LOADING).fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator()

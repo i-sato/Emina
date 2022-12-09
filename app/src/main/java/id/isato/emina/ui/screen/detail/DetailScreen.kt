@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -32,6 +33,7 @@ import id.isato.emina.ui.common.ErrorBox
 import id.isato.emina.ui.common.NetworkImage
 import id.isato.emina.ui.common.UiState
 import id.isato.emina.R
+import id.isato.emina.utils.TestTags
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -87,6 +89,7 @@ fun DetailContent(
     var isFavorite by rememberSaveable { mutableStateOf(favorite) }
 
     Box(modifier = modifier
+        .testTag(TestTags.ANIME_DETAIL)
         .fillMaxSize()
         .padding(8.dp)) {
         Column(

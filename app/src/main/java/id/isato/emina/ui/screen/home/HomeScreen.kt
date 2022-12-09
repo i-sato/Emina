@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -25,13 +26,14 @@ import id.isato.emina.R
 import id.isato.emina.ui.common.*
 import id.isato.emina.ui.model.Anime
 import id.isato.emina.ui.theme.EminaTheme
+import id.isato.emina.utils.TestTags
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
-    navigateToDetail: (Int) -> Unit
+    navigateToDetail: (animeId: Int) -> Unit
 ) {
     var input by rememberSaveable { mutableStateOf("") }
     Column {
@@ -75,9 +77,10 @@ fun HomeScreen(
 fun AnimeList(
     animeList: List<Anime>,
     modifier: Modifier = Modifier,
-    navigateToDetail: (Int) -> Unit
+    navigateToDetail: (animeId: Int) -> Unit
 ) {
     LazyVerticalGrid(
+        modifier = modifier.testTag(TestTags.ANIME_LIST),
         columns = GridCells.Adaptive(160.dp),
         contentPadding = PaddingValues(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -88,7 +91,8 @@ fun AnimeList(
             key = { it.malId }
         ) { anime ->
             AnimeItem(
-                anime = anime,
+                title = anime.title,
+                imageUrl = anime.imageUrl,
                 modifier = modifier.clickable {
                     navigateToDetail(anime.malId)
                 }
@@ -99,7 +103,8 @@ fun AnimeList(
 
 @Composable
 fun AnimeItem(
-    anime: Anime,
+    title: String,
+    imageUrl: String,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -110,7 +115,7 @@ fun AnimeItem(
         Column {
             val density = LocalDensity.current.density
             NetworkImage(
-                url = anime.imageUrl,
+                url = imageUrl,
                 modifier = modifier
                     .fillMaxWidth()
                     .size(170.dp)
@@ -120,7 +125,7 @@ fun AnimeItem(
             }
             Text(
                 modifier = modifier.padding(start = 4.dp, end = 4.dp, bottom = padding),
-                text = anime.title,
+                text = title,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.subtitle1.copy(
@@ -139,7 +144,8 @@ fun AnimeItem(
 @Composable
 @Preview(showBackground = true)
 fun AnimeItemPreview() {
+    val anime = Anime.mock()
     EminaTheme {
-        AnimeItem(anime = Anime.mock())
+        AnimeItem(title = anime.title, imageUrl = anime.imageUrl)
     }
 }

@@ -26,7 +26,7 @@ android {
             }
         }
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "id.isato.emina.HiltTestRunner"
         vectorDrawables {
             useSupportLibrary true
         }
@@ -54,6 +54,9 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion "1.3.2"
+    }
+    testOptions {
+        animationsDisabled = true
     }
 
     packagingOptions {
@@ -110,12 +113,31 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$timber_version"
 
     // Unit Test
+    testImplementation "com.google.truth:truth:$truth_version"
     testImplementation "junit:junit:$junit_version"
 
     // Integration Test
+    androidTestImplementation "androidx.navigation:navigation-testing:$nav_test_version"
+
     androidTestImplementation "androidx.test.ext:junit:$android_junit_ext_version"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+
+    // Compose Test
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
+
+    // Espresso
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+
+    // Hilt Test
+    androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
+    kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_version"
+
+    // Mock Web Server
+    androidTestImplementation "com.squareup.okhttp3:mockwebserver:$mock_web_server_version"
+    androidTestImplementation "com.squareup.okhttp3:okhttp-tls:$mock_web_server_version"
+
+    // Truth
+    androidTestImplementation "com.google.truth:truth:$truth_version"
+
 }
